@@ -50,7 +50,7 @@ Param($window, $controlName,[scriptblock]$Output)
 if($output){
   $script:output=$output
 }
-$c=$window.Content.Child.Children | where Name -eq $controlname
+$c=$window.Content.Child.Children | Where-Object Name -eq $controlname
 $c.ContextMenu=new-object System.Windows.Controls.ContextMenu 
 $c.Add_ContextMenuOpening({
     Param($sender,$e)

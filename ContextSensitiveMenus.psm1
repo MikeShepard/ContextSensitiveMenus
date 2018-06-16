@@ -51,17 +51,17 @@ if($output){
   $script:output=$output
 }
 $c=$window.Content.Child.Children | Where-Object Name -eq $controlname
-$c.ContextMenu=new-object System.Windows.Controls.ContextMenu 
+$c.ContextMenu=new-object System.Windows.Controls.ContextMenu
 $c.Add_ContextMenuOpening({
     Param($sender,$e)
-    
+
     $selectedItem=$this.SelectedItem
     $clickedItem=$selectedItem
     if($SelectedItem -is [System.Windows.Controls.Control]){
       $selectedItem=$selectedItem.Tag
     }
     if($selectedItem -eq $null){
-        $e.handled=$true 
+        $e.handled=$true
     } else {
         $items=get-RelevantMenuItems -item $selectedItem
         $items |foreach-object {
@@ -69,15 +69,15 @@ $c.Add_ContextMenuOpening({
                  $script=[scriptblock]($item.Tag)
                  $useControl=[boolean]($item | get-member UseControl)
                  $item.Add_click({
-                       
+
                        LocalOutHost '--------------------'
                        if($useControl){
                          $selectedItem=$clickedItem
-                       } 
-                       $values=& $script $selectedItem 
+                       }
+                       $values=& $script $selectedItem
                        $values | LocalOutHost
                        LocalOutHost '--------------------'
-                    }.GetNewClosure()) 
+                    }.GetNewClosure())
                  $this.ContextMenu.Items.Add($item) | out-null}
     }
 })

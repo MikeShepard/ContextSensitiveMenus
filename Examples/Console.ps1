@@ -22,7 +22,25 @@ $w=Window {
       } -Orientation Vertical 
    } -Orientation Horizontal
 
+} 
+
+$outputHandler= {
+param([parameter(ValueFromPipeline=$true)][PSObject]$params) $params | 
+                                     out-string | 
+                                     foreach {
+                                        $t3.AppendText($_)
+                                        $t3.ScrollToEnd()
+                                       }
 }
+
+$t2.Add_KeyDown({
+    param($sender,$e) 
+    if($e.Key -eq [system.windows.input.key]::Return){
+      & ([ScriptBlock]::Create($this.Text)) | out-string -Width 200 | & $outputHandler
+      $this.text=''
+    }
+})
+
 Add-TypeMenuItem -typename System.ServiceProcess.ServiceController -items $items
 
 $ExecuteScript={
@@ -44,19 +62,8 @@ Add-TypeMenuItem -typename MDS_Editor -items @{Run=$ExecuteScript
 add-typemenuitem -typename MDS_Output -items @{Clear={$args[0].Text=''}} -UseControl
 
 Add-ContextMenuToControl -control $l 
-
-
 Add-ContextMenuToControl -Control $t
 Add-ContextMenuToControl -Control $t2
-Add-ContextMenuToControl -Control $t3 -output {
-param([parameter(ValueFromPipeline=$true)][PSObject]$params) $params | 
-                                     out-string | 
-                                     foreach {
-                                        $t3.Text=$t3.Text+$_+"`r`n";
-                                        $t3.ScrollToEnd()
-                                       }
-}
-
-
+Add-ContextMenuToControl -Control $t3 -output $outputHandler
 
 $w.ShowDialog() | out-null

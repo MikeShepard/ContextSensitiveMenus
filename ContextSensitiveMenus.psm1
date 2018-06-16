@@ -38,7 +38,7 @@ function LocalOutHost{
 param([parameter(ValueFromPipeline=$true)][PSObject]$params)
  process{
   if ($output){
-     $params | out-string -Width 200 | & $output
+     $params | & $output
   } else {
     $params | out-host
   }
@@ -46,18 +46,28 @@ param([parameter(ValueFromPipeline=$true)][PSObject]$params)
 }
 
 function Add-ContextMenuToControl{
-Param($window, $controlName,[scriptblock]$Output)
+
+Param([Parameter(ParameterSetName='NamedControl')]$window,
+      [Parameter(ParameterSetName='NamedControl')]$controlName,
+      [Parameter(ParameterSetName='ControlObject')]$control,
+      [scriptblock]$Output)
 if($output){
   $script:output=$output
 }
-$c=$window.Content.Child.Children | Where-Object Name -eq $controlname
-$c.ContextMenu=new-object System.Windows.Controls.ContextMenu
-$c.Add_ContextMenuOpening({
+if(-not $control){
+    $control=$window.Content.Child.Children | Where-Object Name -eq $controlname
+}
+$control.ContextMenu=new-object System.Windows.Controls.ContextMenu
+$control.Add_ContextMenuOpening({
     Param($sender,$e)
-
-    $selectedItem=$this.SelectedItem
-    $clickedItem=$selectedItem
-    if($SelectedItem -is [System.Windows.Controls.Control]){
+    if($this| get-member -Name Items){
+        $selectedItem=$this.SelectedItem
+        $clickedItem=$selectedItem
+    } else {
+        $selectedItem=$this
+        $clickedItem=$this
+    }
+    if($SelectedItem -is [System.Windows.Controls.Control] -and $selectedItem.Tag){
       $selectedItem=$selectedItem.Tag
     }
     if($selectedItem -eq $null){
@@ -70,18 +80,18 @@ $c.Add_ContextMenuOpening({
                  $useControl=[boolean]($item | get-member UseControl)
                  $item.Add_click({
 
-                       LocalOutHost '--------------------'
+                       #LocalOutHost '--------------------'
                        if($useControl){
                          $selectedItem=$clickedItem
                        }
                        $values=& $script $selectedItem
-                       $values | LocalOutHost
-                       LocalOutHost '--------------------'
+                       $values | out-string -Width 200 | LocalOutHost
+                       #LocalOutHost '--------------------'
                     }.GetNewClosure())
                  $this.ContextMenu.Items.Add($item) | out-null}
     }
 })
-$c.add_ContextMenuClosing({
+$control.add_ContextMenuClosing({
     $this.ContextMenu.Items.Clear()
  })
 }

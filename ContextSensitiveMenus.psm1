@@ -71,7 +71,7 @@ $control.Add_ContextMenuOpening({
       $selectedItem=$selectedItem.Tag
     }
     if($selectedItem -eq $null){
-        $e.handled=$true 
+        $e.handled=$true
     } else {
         $items=get-RelevantMenuItems -item $selectedItem
         $items |foreach-object {

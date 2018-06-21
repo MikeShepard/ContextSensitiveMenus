@@ -24,6 +24,7 @@ $w=Window {
     } -Orientation Horizontal -Property @{Width=[Double]::NaN;Height=[Double]::NaN;VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
    }
 }
+
 Add-TypeMenuItem -typename System.ServiceProcess.ServiceController -items $items
 
 $ExecuteScript={
@@ -57,6 +58,7 @@ Add-ContextMenuToControl -Control $t3 -output {
                                         $t3.ScrollToEnd()
                                        }
 }
+
 
 
 

@@ -7,21 +7,22 @@ $items=@{
 }
 
 $w=Window {
-   StackPanel {
+   Grid{
+    StackPanel {
       $script:l=ListBox Items -property @{MinWidth=300;MinHeight=400;MaxHeight=400} -contents (get-service)
       $l 
-      StackPanel {
-         $script:t=MultilineTextBox Editor -property @{MinWidth=300;MinHeight=200;MaxHeight=200}
+      Grid {
+         $script:t=MultilineTextBox Editor -property @{MinWidth=300;MinHeight=200;MaxHeight=200;Margin="0,0,0,400"}
          $t.PSTypeNames.Add('MDS_Editor')
          $t
          $script:t2=TextBox CommandLine -property @{MinWidth=300} 
          $t2
-         $script:t3=MultilineTextBox Output -property @{MinWidth=300;MinHeight=200;MaxHeight=200;FontFamily='Consolas'}
+         $script:t3=MultilineTextBox Output -property @{Width=[Double]::NaN;Height=[Double]::NaN;MinWidth=300;MinHeight=200;FontFamily='Consolas';VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
          $t3.PSTypeNames.Add('MDS_Output')
          $t3
-      } -Orientation Vertical 
-   } -Orientation Horizontal
-
+      } -Orientation Vertical -Property @{Width=[Double]::NaN;Height=[Double]::NaN;VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
+    } -Orientation Horizontal -Property @{Width=[Double]::NaN;Height=[Double]::NaN;VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
+   }
 }
 Add-TypeMenuItem -typename System.ServiceProcess.ServiceController -items $items
 
@@ -49,7 +50,7 @@ Add-ContextMenuToControl -control $l
 Add-ContextMenuToControl -Control $t
 Add-ContextMenuToControl -Control $t2
 Add-ContextMenuToControl -Control $t3 -output {
-param([parameter(ValueFromPipeline=$true)][PSObject]$params) $params | 
+  param([parameter(ValueFromPipeline=$true)][PSObject]$params) $params | 
                                      out-string | 
                                      foreach {
                                         $t3.Text=$t3.Text+$_+"`r`n";

@@ -55,7 +55,7 @@ if($output){
   $script:output=$output
 }
 if(-not $control){
-    $control=$window.Content.Child.Children | Where-Object Name -eq $controlname
+    $control=$window.GetControlByName($controlname)
 }
 $control.ContextMenu=new-object System.Windows.Controls.ContextMenu 
 $control.Add_ContextMenuOpening({

@@ -47,7 +47,7 @@ param([parameter(ValueFromPipeline=$true)][PSObject]$params)
 
 function Add-ContextMenuToControl{
 
-Param([Parameter(ParameterSetName='NamedControl')]$window, 
+Param([Parameter(ParameterSetName='NamedControl')]$window,
       [Parameter(ParameterSetName='NamedControl')]$controlName,
       [Parameter(ParameterSetName='ControlObject')]$control,
       [scriptblock]$Output)
@@ -57,7 +57,7 @@ if($output){
 if(-not $control){
     $control=$window.GetControlByName($controlname)
 }
-$control.ContextMenu=new-object System.Windows.Controls.ContextMenu 
+$control.ContextMenu=new-object System.Windows.Controls.ContextMenu
 $control.Add_ContextMenuOpening({
     Param($sender,$e)
     if($this| get-member -Name Items){
@@ -70,7 +70,7 @@ $control.Add_ContextMenuOpening({
     if($SelectedItem -is [System.Windows.Controls.Control] -and $selectedItem.Tag){
       $selectedItem=$selectedItem.Tag
     }
-    if($selectedItem -eq $null){
+    if($null -eq $selectedItem){
         $e.handled=$true
     } else {
         $items=get-RelevantMenuItems -item $selectedItem
@@ -79,15 +79,14 @@ $control.Add_ContextMenuOpening({
                  $script=[scriptblock]($item.Tag)
                  $useControl=[boolean]($item | get-member UseControl)
                  $item.Add_click({
-                       
                        #LocalOutHost '--------------------'
                        if($useControl){
                          $selectedItem=$clickedItem
-                       } 
-                       $values=& $script $selectedItem 
+                       }
+                       $values=& $script $selectedItem
                        $values | out-string -Width 200 | LocalOutHost
                        #LocalOutHost '--------------------'
-                    }.GetNewClosure()) 
+                    }.GetNewClosure())
                  $this.ContextMenu.Items.Add($item) | out-null}
     }
 })

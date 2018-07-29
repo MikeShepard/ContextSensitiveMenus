@@ -30,7 +30,7 @@ CompanyName = 'PowerShellStation.com'
 Copyright = '2018'
 
 # Description of the functionality provided by this module
-# Description = 'Allows you to add type-sensitive context menus to WPF controls'
+Description = 'Allows you to add type-sensitive context menus to WPF controls'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''

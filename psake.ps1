@@ -103,6 +103,7 @@ Task Deploy -Depends Build {
             Force   = $true
             Recurse = $false # We keep psdeploy artifacts, avoid deploying those : )
         }
+        "Deploying to PSGallery"
         Invoke-PSDeploy @Verbose @Params
     }
 }

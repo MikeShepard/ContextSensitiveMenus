@@ -1,4 +1,4 @@
-﻿ipmo wpf_Dsl -force
+﻿ipmo WPFBot3000 -force
 ipmo contextsensitivemenus -force
 $items=@{
           Start={$args[0] | Start-Service}
@@ -9,18 +9,15 @@ $items=@{
 $w=Window {
    Grid{
     StackPanel {
-      $script:l=ListBox Items -property @{MinWidth=300;MinHeight=400;MaxHeight=400} -contents (get-service)
-      $l 
+      ListBox Items -property @{MinWidth=300;MinHeight=400;MaxHeight=400} -contents (get-service) -name L
       Grid {
-         $script:t=MultilineTextBox Editor -property @{MinWidth=300;MinHeight=200;MaxHeight=200;Margin="0,0,0,400"}
+         MultilineTextBox Editor -property @{MinWidth=300;MinHeight=200;MaxHeight=200;Margin="0,0,0,400"} -name t
          $t.PSTypeNames.Add('MDS_Editor')
-         $t
-         $script:t2=TextBox CommandLine -property @{MinWidth=300} 
-         $t2
-         $script:t3=MultilineTextBox Output -property @{Width=[Double]::NaN;Height=[Double]::NaN;MinWidth=300;MinHeight=200;FontFamily='Consolas';VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
+         TextBox CommandLine -property @{MinWidth=300} -name t2
+
+         MultilineTextBox Output -property @{Width=[Double]::NaN;Height=[Double]::NaN;MinWidth=300;MinHeight=200;FontFamily='Consolas';VerticalAlignment='Stretch';HorizontalAlignment='Stretch'} -name T3
          $t3.PSTypeNames.Add('MDS_Output')
-         $t3
-      } -Orientation Vertical -Property @{Width=[Double]::NaN;Height=[Double]::NaN;VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
+      } -Property @{Width=[Double]::NaN;Height=[Double]::NaN;VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
     } -Orientation Horizontal -Property @{Width=[Double]::NaN;Height=[Double]::NaN;VerticalAlignment='Stretch';HorizontalAlignment='Stretch'}
    }
 }
@@ -42,10 +39,10 @@ $ExecuteSelected={
 
 Add-TypeMenuItem -typename MDS_Editor -items @{Run=$ExecuteScript
                                                RunSelected=$ExecuteSelected}
-                                                
+
 add-typemenuitem -typename MDS_Output -items @{Clear={$args[0].Text=''}} -UseControl
 
-Add-ContextMenuToControl -control $l 
+Add-ContextMenuToControl -control $l
 
 
 Add-ContextMenuToControl -Control $t

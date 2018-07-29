@@ -1,5 +1,6 @@
 ﻿ipmo ContextSensitiveMenus -force
-ipmo wpf_dsl -force
+ipmo WPFBot3000 -force
+
 
 
 $treeContents=get-service | select -first 25| Group-Object -Property Status -AsHashTable 

@@ -1,4 +1,4 @@
-﻿ipmo wpf_dsl -force
+﻿ipmo WPFBot3000 -force
 ipmo ContextSensitiveMenus -force
 
 $files=get-childitem c:\temp -file | Select-Object -first 5

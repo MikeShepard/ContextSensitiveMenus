@@ -1,6 +1,6 @@
 ﻿Using namespace System.Windows.Controls
 
-ipmo wpf_dsl -force
+ipmo WPFBot3000 -force
 ipmo contextsensitivemenus -force
 
 write-host 'Retrieving List of Modules, please be patient'

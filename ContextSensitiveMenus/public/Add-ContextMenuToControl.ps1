@@ -21,8 +21,6 @@ An optional scriptblock to use to send output from a menu clicked event.
 .EXAMPLE
 An example
 
-.NOTES
-General notes
 #>
 function Add-ContextMenuToControl{
 
